@@ -17,7 +17,7 @@ def get_arguments():
 args = get_arguments()
 img_path = Path(args.image_path)
 
-# read image
+# read image, Shape: (height, width, 3) (3 kênh: Blue, Green, Red).Giá trị pixel: [0, 255]
 img = cv2.imread(str(img_path))
 
 # start

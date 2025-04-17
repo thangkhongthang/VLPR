@@ -4,3 +4,17 @@ tensorflow
 imutils==0.5.4
 scikit-image==0.18.1
 scikit-learn==0.24.1
+
+MỘT SỐ LỖI CÓ THỂ GẶP:
+
+- Không tìm thấy thư mục src: 
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from file_in_src import sth.
+
+- Không có numpy._core: thư mục này chỉ tồn tại với numpy>= 1.26
+- Không tìm được scikit learn mặc dù đã cài:
+       -> kiểm tra môi trường đang làm việc: import sys; print(sys.executable) 
+       -> pip install scikit-learn
+-        

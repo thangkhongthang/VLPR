@@ -1,16 +1,21 @@
 import tensorflow.keras as keras
 import numpy as np
-
-from src import data_utils
-
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+# Giả định rằng data_utils.py tồn tại và có các hàm get_digits_data, get_alphas_data
+from data_utils import get_digits_data, get_alphas_data
 
 class Datasets(object):
     def __init__(self):
         self.all_data = []
 
         # Input data
-        self.digits_data = data_utils.get_digits_data('./data/digits.npy')
-        self.alphas_data = data_utils.get_alphas_data('./data/alphas.npy')
+        # hàm get_digits_data có đầu vào là path của file npynpy
+        #C:\Users\Nguyen Van Thang\Documents\GitHub\License-Plate-Recognition\data\digits.npynpy
+        
+        self.digits_data = get_digits_data(r'C:\Users\Nguyen Van Thang\Documents\GitHub\License-Plate-Recognition\data\digits.npy')
+        self.alphas_data = get_alphas_data(r'C:\Users\Nguyen Van Thang\Documents\GitHub\License-Plate-Recognition\data\alphas.npy')
 
         # Preprocess
         self.convert_data_format()
@@ -26,7 +31,7 @@ class Datasets(object):
             labels.append(label)
 
         labels = keras.utils.to_categorical(labels, num_classes=32)
-        return images, labels
+        return np.array(images), np.array(labels)  # Chuyển đổi sang numpy array
 
     def convert_data_format(self):
         # Digits data

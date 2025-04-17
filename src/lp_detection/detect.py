@@ -1,4 +1,5 @@
-import src.data_utils as utils
+from .. import data_utils as utils
+# import src.data_utils as utils
 import cv2
 import numpy as np
 
@@ -53,7 +54,7 @@ class detectNumberPlate(object):
 
         coordinates = []
         for i in indices:
-            index = i[0]
+            index = i
             x_min, y_min, width, height = boxes[index]
             x_min = round(x_min)
             y_min = round(y_min)
