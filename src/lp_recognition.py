@@ -153,3 +153,38 @@ class E2E(object):
             license_plate = "".join([str(ele[0]) for ele in first_line]) + "-" + "".join([str(ele[0]) for ele in second_line])
 
         return license_plate
+    
+    def get_license_plate_list(self):
+        """Returns the detected license plate characters in a list format.
+        
+        Returns:
+            list: A list containing the license plate characters grouped by lines.
+                  For single-line plates, returns [list_of_characters].
+                  For two-line plates, returns [first_line_chars, second_line_chars].
+                  Returns None if no plate is detected.
+        """
+        if not hasattr(self, 'candidates') or not self.candidates:
+            return None
+            
+        first_line = []
+        second_line = []
+
+        for candidate, coordinate in self.candidates:
+            if self.candidates[0][1][0] + 40 > coordinate[0]:
+                first_line.append((candidate, coordinate[1]))
+            else:
+                second_line.append((candidate, coordinate[1]))
+
+        def take_second(s):
+            return s[1]
+
+        first_line = sorted(first_line, key=take_second)
+        second_line = sorted(second_line, key=take_second)
+
+        if len(second_line) == 0:  # if license plate has 1 line
+            return [[char[0] for char in first_line]]
+        else:   # if license plate has 2 lines
+            return [
+                [char[0] for char in first_line],
+                [char[0] for char in second_line]
+            ]    
