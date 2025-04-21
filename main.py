@@ -9,7 +9,7 @@ from src.lp_recognition import E2E
 
 def get_arguments():
     arg = argparse.ArgumentParser()
-    arg.add_argument('-i', '--image_path', help='link to image', default='./samples/1.jpg')
+    arg.add_argument('-i', '--image_path', help='link to image', default='./samples/31.jpg')
 
     return arg.parse_args()
 

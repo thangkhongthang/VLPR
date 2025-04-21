@@ -16,6 +16,10 @@ from skimage.filters import threshold_local
 ALPHA_DICT = {0: 'A', 1: 'B', 2: 'C', 3: 'D', 4: 'E', 5: 'F', 6: 'G', 7: 'H', 8: 'K', 9: 'L', 10: 'M', 11: 'N', 12: 'P',
               13: 'R', 14: 'S', 15: 'T', 16: 'U', 17: 'V', 18: 'X', 19: 'Y', 20: 'Z', 21: '0', 22: '1', 23: '2', 24: '3',
               25: '4', 26: '5', 27: '6', 28: '7', 29: '8', 30: '9', 31: "Background"}
+ok = {0: 'A', 1: 'B', 2: 'C', 3: 'D', 4: 'E', 5: 'F', 6: 'G', 7: 'H', 8: 'K', 9: 'L', 10: 'M', 11: 'N', 12: 'P',
+              13: 'R', 14: 'S', 15: 'T', 16: 'U', 17: 'V', 18: 'X', 19: 'Y', 20: 'Z', 21: '0', 22: '1', 23: '2', 24: '3',
+              25: '4', 26: '5', 27: '6', 28: '7', 29: '8', 30: '9', 31: "Background"}
+
 
 LP_DETECTION_CFG = {
     "weight_path": "./src/weights/yolov3-tiny_15000.weights",
@@ -58,6 +62,7 @@ class knn_E2E(object):
         return self.image
 
     def segmentation(self, LpRegion):
+
         V = cv2.split(cv2.cvtColor(LpRegion, cv2.COLOR_BGR2HSV))[2]
         T = threshold_local(V, 15, offset=10, method="gaussian")
         thresh = (V > T).astype("uint8") * 255
@@ -94,23 +99,28 @@ class knn_E2E(object):
     def recognizeChar(self):
         characters = []
         coordinates = []
-
+        
         for char, coordinate in self.candidates:
             # Flatten image for KNN (28,28,1) -> (784,)
             char_flat = char.reshape(1, -1)
-            characters.append(char_flat[0])  # Remove batch dimension
+            characters.append(char)  # Remove batch dimension
             coordinates.append(coordinate)
+            
 
         if characters:
+            
+            
             characters = np.array(characters)
             # KNN returns class indices directly
             result_idx = self.recogChar.predict(characters)
             
             self.candidates = []
             for i in range(len(result_idx)):
-                if result_idx[i] == 31:  # Background class
+                if result_idx[i] == '"Background"':  # Background class
                     continue
-                self.candidates.append((ALPHA_DICT[result_idx[i]], coordinates[i]))
+                
+                self.candidates.append((result_idx[i], coordinates[i]))
+
 
     def format(self):
         first_line = []

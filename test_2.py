@@ -10,7 +10,7 @@ from src.knn_lp_recognition import knn_E2E
 
 def get_arguments():
     arg = argparse.ArgumentParser()
-    arg.add_argument('-i', '--image_path', help='link to image', default='./samples/31.jpg')
+    arg.add_argument('-i', '--image_path', help='link to image', default='./samples/tai.jpg')
 
     return arg.parse_args()
 
@@ -28,7 +28,8 @@ start = time.time()
 model = knn_E2E()
 
 # recognize license plate
-image = model.predict(img)
+model.recognizeChar()
+
 
 # end
 end = time.time()
@@ -36,9 +37,9 @@ end = time.time()
 print('Model process on %.2f s' % (end - start))
 
 # show image
-cv2.imshow('License Plate', image)
-if cv2.waitKey(0) & 0xFF == ord('q'):
-    exit(0)
+#cv2.imshow('License Plate', image)
+#if cv2.waitKey(0) & 0xFF == ord('q'):
+   # exit(0)
 
 
-cv2.destroyAllWindows()
+#cv2.destroyAllWindows()

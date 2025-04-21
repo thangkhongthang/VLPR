@@ -125,8 +125,10 @@ class E2E(object):
 
         self.candidates = []
         for i in range(len(result_idx)):
+            print(result_idx[i])
             if result_idx[i] == 31:    # if is background or noise, ignore it
                 continue
+            #print(result_idx[i])
             self.candidates.append((ALPHA_DICT[result_idx[i]], coordinates[i]))
 
     def format(self):

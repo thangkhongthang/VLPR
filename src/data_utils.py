@@ -3,6 +3,7 @@ import cv2
 
 
 def get_digits_data(path):
+    ## lỗi numpy._core
     data = np.load(path, allow_pickle=True)
     total_nb_data = len(data)
     np.random.shuffle(data)
@@ -18,6 +19,8 @@ def get_digits_data(path):
 
 
 def get_alphas_data(path):
+    ### lỗi np._core, np ver 1.24
+    
     data = np.load(path, allow_pickle=True)
     total_nb_data = len(data)
 

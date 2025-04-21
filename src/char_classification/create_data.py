@@ -2,9 +2,12 @@ import os
 import numpy as np
 import cv2
 
-path = "./data/categorized/digits/"
-data = []
+# Tạo thư mục output nếu chưa tồn tại
+os.makedirs("./data", exist_ok=True)
 
+# Xử lý digits
+path = 'c:/Users/Nguyen Van Thang/Documents/GitHub/License-Plate-Recognition/data/categorized/digits/'
+data = []
 
 for fi in os.listdir(path):
     if fi == "0":
@@ -31,23 +34,26 @@ for fi in os.listdir(path):
         label = 31
     else:
         label = -1
-        ValueError("Don't match file")
+        raise ValueError(f"Don't match file: {fi}")
 
     img_fi_path = os.listdir(path + fi)
     for img_path in img_fi_path:
         img = cv2.imread(path + fi + "/" + img_path, cv2.IMREAD_GRAYSCALE)
+        if img is None:
+            print(f"Failed to read image: {path + fi + '/' + img_path}")
+            continue
         img = cv2.resize(img, (28, 28), cv2.INTER_AREA)
         img = img.reshape((28, 28, 1))
         data.append((img, label))
 
+output_path = "./data/digits.npy"
+np.save(output_path, np.array(data, dtype=object))
+print(f"Saved {len(data)} digits to {output_path}")
 
-np.save("./data/digits.npy", data)
+# Xử lý alphas
+path = 'c:/Users/Nguyen Van Thang/Documents/GitHub/License-Plate-Recognition/data/categorized/alphas/'
 
-#--------------------------------------------------------------------------------------------------
-
-path = "./data/categorized/alphas/"
 data = []
-
 
 for fi in os.listdir(path):
     if fi == "A":
@@ -94,15 +100,18 @@ for fi in os.listdir(path):
         label = 20
     else:
         label = -1
-        ValueError("Don't match file")
+        raise ValueError(f"Don't match file: {fi}")
 
     img_fi_path = os.listdir(path + fi)
     for img_path in img_fi_path:
         img = cv2.imread(path + fi + "/" + img_path, cv2.IMREAD_GRAYSCALE)
+        if img is None:
+            print(f"Failed to read image: {path + fi + '/' + img_path}")
+            continue
         img = cv2.resize(img, (28, 28), cv2.INTER_AREA)
         img = img.reshape((28, 28, 1))
         data.append((img, label))
 
-
-np.save("./data/alphas.npy", data)
-
+output_path = "./data/alphas.npy"
+np.save(output_path, np.array(data, dtype=object))
+print(f"Saved {len(data)} alphas to {output_path}")
