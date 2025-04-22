@@ -10,7 +10,7 @@ from src.knn_lp_recognition import knn_E2E
 
 def get_arguments():
     arg = argparse.ArgumentParser()
-    arg.add_argument('-i', '--image_path', help='link to image', default='./test/4.jpg')
+    arg.add_argument('-i', '--image_path', help='link to image', default='./test/img (2).jpg')
 
     return arg.parse_args()
 

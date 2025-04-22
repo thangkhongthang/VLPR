@@ -14,6 +14,7 @@ def get_arguments():
     return arg.parse_args()
 
 
+
 args = get_arguments()
 img_path = Path(args.image_path)
 
@@ -44,5 +45,6 @@ if cv2.waitKey(0) & 0xFF == ord('q'):
 cv2.destroyAllWindows()
 """
 # show list
+
 print(lis)
 
