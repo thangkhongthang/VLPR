@@ -34,7 +34,7 @@ class knn_E2E(object):
                                         LP_DETECTION_CFG['config_path'], 
                                         LP_DETECTION_CFG['weight_path'])
         # Initialize KNN model
-        self.recogChar = KNN_Model(trainable=True)
+        self.recogChar = KNN_Model(trainable=False)
         self.recogChar.train()
         self.candidates = []
 
