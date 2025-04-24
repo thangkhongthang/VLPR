@@ -3,6 +3,8 @@ import numpy as np
 from skimage import measure
 from imutils import perspective
 import imutils
+import os
+import uuid
 
 from src.data_utils import order_points, convert2Square, draw_labels_and_boxes
 from src.lp_detection.detect import detectNumberPlate
@@ -28,6 +30,8 @@ class E2E(object):
         self.recogChar = CNN_Model(trainable=False).model
         self.recogChar.load_weights(CHAR_CLASSIFICATION_WEIGHTS)
         self.candidates = []
+        # list để lưu ảnh charchar
+        self.character_images = []
 
     def extractLP(self):
         coordinates = self.detectLP.detect(self.image)
@@ -110,7 +114,9 @@ class E2E(object):
                     square_candidate = cv2.resize(square_candidate, (28, 28), cv2.INTER_AREA)
                     square_candidate = square_candidate.reshape((28, 28, 1))
                     self.candidates.append((square_candidate, (y, x)))
-
+                    # ghi lại img
+                    self.character_images.append(square_candidate)
+                    
     def recognizeChar(self):
         characters = []
         coordinates = []
@@ -187,4 +193,12 @@ class E2E(object):
             return [
                 [char[0] for char in first_line],
                 [char[0] for char in second_line]
-            ]    
+            ] 
+    def save_character_images(self, output_dir):
+        if not os.path.exists(output_dir):
+            os.makedirs(output_dir)
+        for i, char_img in enumerate(self.character_images):
+            img = char_img.squeeze()
+            filename = os.path.join(output_dir, f"char_{i}.jpg")
+            cv2.imwrite(filename, img)
+                    
