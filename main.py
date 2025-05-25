@@ -9,8 +9,7 @@ from src.lp_recognition import E2E
 
 def get_arguments():
     arg = argparse.ArgumentParser()
-    arg.add_argument('-i', '--image_path', help='link to image', default='./test/1.jpg')
-
+    arg.add_argument('-i', '--image_path', help='link to image', default='./test/i (2).jpg')
     return arg.parse_args()
 
 
@@ -38,6 +37,7 @@ end = time.time()
 print('Model process on %.2f s' % (end - start))
 
 # show image
+
 cv2.imshow('License Plate', image)
 if cv2.waitKey(0) & 0xFF == ord('q'):
     exit(0)

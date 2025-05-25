@@ -1,7 +1,8 @@
+#contributors: thắng, hoàng anh, bình, long, bảo
 import numpy as np
 import cv2
 
-
+# Thắngắng
 def get_digits_data(path):
     ## lỗi numpy._core
     data = np.load(path, allow_pickle=True)
@@ -17,7 +18,7 @@ def get_digits_data(path):
 
     return data_train
 
-
+# Thắng
 def get_alphas_data(path):
     ### lỗi np._core, np ver 1.24
     
@@ -30,19 +31,19 @@ def get_alphas_data(path):
     for i in range(total_nb_data):
         data_train.append(data[i])
 
-    print("-------------DONE------------")
+    print("---------DONE------------")
     print('The number of train alphas data: ', len(data_train))
 
     return data_train
 
-
+# Long 
 def get_labels(path):
     with open(path, 'r') as file:
         lines = file.readlines()
 
     return [line.strip() for line in lines]
 
-
+# Hoàng Anh
 def draw_labels_and_boxes(image, labels, boxes):
     x_min = round(boxes[0])
     y_min = round(boxes[1])
@@ -54,19 +55,17 @@ def draw_labels_and_boxes(image, labels, boxes):
 
     return image
 
-
+#hoàng anh
 def get_output_layers(model):
     layers_name = model.getLayerNames()
     output_layers = [layers_name[i - 1] for i in model.getUnconnectedOutLayers()]
 
     return output_layers
 
-
+# bảo
 def order_points(coordinates):
     rect = np.zeros((4, 2), dtype="float32")
     x_min, y_min, width, height = coordinates
-
-    # top left - top right - bottom left - bottom right
     rect[0] = np.array([round(x_min), round(y_min)])
     rect[1] = np.array([round(x_min + width), round(y_min)])
     rect[2] = np.array([round(x_min), round(y_min + height)])
@@ -74,13 +73,8 @@ def order_points(coordinates):
 
     return rect
 
-
+# LongLong
 def convert2Square(image):
-    """
-    Resize non square image(height != width to square one (height == width)
-    :param image: input images
-    :return: numpy array
-    """
 
     img_h = image.shape[0]
     img_w = image.shape[1]

@@ -1,3 +1,4 @@
+### CONtributors: LONG
 from .. import data_utils as utils
 # import src.data_utils as utils
 import cv2
@@ -6,6 +7,9 @@ import numpy as np
 
 class detectNumberPlate(object):
     def __init__(self, classes_path, config_path, weight_path, threshold=0.5):
+        # config_path: file config của yolo
+        # threshold: ngưỡng tin cậy (def= 0.5)
+        # class_path: đường dẫn đến các lớp (1 lớp)
         self.weight_path = weight_path
         self.cfg_path = config_path
         self.labels = utils.get_labels(classes_path)
@@ -61,4 +65,4 @@ class detectNumberPlate(object):
 
             coordinates.append((x_min, y_min, width, height))
 
-        return coordinates
+        return coordinates # tọa độ của cái biển >>> tách biển số dưạ trên tọa độ >> input cho bước tách ký tựtự

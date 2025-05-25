@@ -32,20 +32,28 @@ class CNN_Model(object):
     def _build_model(self):
         # CNN model
         self.model = Sequential()
+    # khối 1    
+        # convolution layerss (lớp tích chập)
         self.model.add(Conv2D(32, (3, 3), padding='same', activation='relu', input_shape=(28, 28, 1)))
         self.model.add(Conv2D(32, (3, 3), activation='relu'))
+
+        # pooling layer (lớp gộpgộp)
         self.model.add(MaxPooling2D(pool_size=(2, 2)))
         self.model.add(Dropout(0.25))
-
+        
+    # khối 2....
         self.model.add(Conv2D(64, (3, 3), padding='same', activation='relu'))
         self.model.add(Conv2D(64, (3, 3), activation='relu'))
         self.model.add(MaxPooling2D(pool_size=(2, 2)))
         self.model.add(Dropout(0.25))
 
+    # khối 3
         self.model.add(Conv2D(64, (3, 3), padding='same', activation='relu'))
         self.model.add(Conv2D(64, (3, 3), activation='relu'))
         self.model.add(MaxPooling2D(pool_size=(2, 2)))
         self.model.add(Dropout(0.25))
+
+    # fully connected layer 
 
         self.model.add(Flatten())
         self.model.add(Dense(512, activation='relu'))

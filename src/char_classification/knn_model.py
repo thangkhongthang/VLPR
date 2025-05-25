@@ -1,3 +1,5 @@
+### CONTRIBUTOR: THẮNG
+
 import numpy as np
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.metrics import accuracy_score
@@ -30,10 +32,11 @@ class KNN_Model(object):
 
     def _build_model(self):
         # KNN model
-        self.model = KNeighborsClassifier(n_neighbors=self.n_neighbors, weights='distance', metric='euclidean')
+        self.model = KNeighborsClassifier(n_neighbors = self.n_neighbors, weights='distance', metric='euclidean')
         
     def train(self):
         print("Training KNN model......")
+        print(config.KNN_NEIGHBORS)
         trainX, trainY = self.data.gen()
         
         # Convert one-hot encoded labels back to categorical
@@ -56,6 +59,7 @@ class KNN_Model(object):
         
     def predict(self, images):
         """Predict labels for input images"""
+
         if len(images.shape) == 3:  # If single image (28, 28, 1)
             images = images.reshape(1, -1)
         elif len(images.shape) == 4:  # If batch of images (N, 28, 28, 1)
@@ -63,3 +67,6 @@ class KNN_Model(object):
             
         predictions = self.model.predict(images)
         return [ALPHA_DICT[p] for p in predictions]
+    
+model = KNN_Model(trainable=True)    
+model.train()

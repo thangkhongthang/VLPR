@@ -1,7 +1,7 @@
 import os
 import numpy as np
 import cv2
-
+#numpify cáicái
 # Tạo thư mục output nếu chưa tồn tại
 os.makedirs("./data", exist_ok=True)
 

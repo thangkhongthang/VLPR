@@ -1,3 +1,4 @@
+# CONTRIBUTORS: THẮNG, BÌNH, HOÀNG ANH, BẢO
 import cv2
 import numpy as np
 from skimage import measure
@@ -41,33 +42,32 @@ class E2E(object):
         for coordinate in coordinates:
             yield coordinate
 
+### hoang anh 
     def predict(self, image):
-        # Input image or frame
+        # INPUTINPUT
         self.image = image
 
-        for coordinate in self.extractLP():     # detect license plate by yolov3
+        for coordinate in self.extractLP():   
             self.candidates = []
 
-            # convert (x_min, y_min, width, height) to coordinate(top left, top right, bottom left, bottom right)
             pts = order_points(coordinate)
 
-            # crop number plate used by bird's eyes view transformation
             LpRegion = perspective.four_point_transform(self.image, pts)
            
             # segmentation
             self.segmentation(LpRegion)
 
-            # recognize characters
+            # nhận diendien
             self.recognizeChar()
 
-            # format and display license plate
+            # post - processing  ,,,
             license_plate = self.format()
 
-            # draw labels
+            # hiển thị , draw_labels_and_boxes in data_utils
             self.image = draw_labels_and_boxes(self.image, license_plate, coordinate)
 
         return self.image
-
+# bình ---- 
     def segmentation(self, LpRegion):
         # apply thresh to extracted licences plate
         V = cv2.split(cv2.cvtColor(LpRegion, cv2.COLOR_BGR2HSV))[2]
@@ -81,7 +81,7 @@ class E2E(object):
         thresh = imutils.resize(thresh, width=400)
         thresh = cv2.medianBlur(thresh, 5)
 
-        # connected components analysis
+        # hamf đánh nhãn các vùngvùng connected components 
         labels = measure.label(thresh, connectivity=2, background=0)
 
         # loop over the unique components
@@ -90,7 +90,7 @@ class E2E(object):
             if label == 0:
                 continue
 
-            # init mask to store the location of the character candidates
+            # Tạo ảnh nhị phân mới chỉ chứa vùng có nhãn hiện tại
             mask = np.zeros(thresh.shape, dtype="uint8")
             mask[labels == label] = 255
 
@@ -116,7 +116,7 @@ class E2E(object):
                     self.candidates.append((square_candidate, (y, x)))
                     # ghi lại img
                     self.character_images.append(square_candidate)
-                    
+# BẢO                  
     def recognizeChar(self):
         characters = []
         coordinates = []
@@ -136,7 +136,7 @@ class E2E(object):
                 continue
             #print(result_idx[i])
             self.candidates.append((ALPHA_DICT[result_idx[i]], coordinates[i]))
-
+## thắng ---
     def format(self):
         first_line = []
         second_line = []
@@ -159,16 +159,9 @@ class E2E(object):
             license_plate = "".join([str(ele[0]) for ele in first_line]) + "-" + "".join([str(ele[0]) for ele in second_line])
 
         return license_plate
-    
+# thắng --    
     def get_license_plate_list(self):
-        """Returns the detected license plate characters in a list format.
-        
-        Returns:
-            list: A list containing the license plate characters grouped by lines.
-                  For single-line plates, returns [list_of_characters].
-                  For two-line plates, returns [first_line_chars, second_line_chars].
-                  Returns None if no plate is detected.
-        """
+      
         if not hasattr(self, 'candidates') or not self.candidates:
             return None
             
@@ -187,9 +180,9 @@ class E2E(object):
         first_line = sorted(first_line, key=take_second)
         second_line = sorted(second_line, key=take_second)
 
-        if len(second_line) == 0:  # if license plate has 1 line
+        if len(second_line) == 0:  # 1 lineline
             return [[char[0] for char in first_line]]
-        else:   # if license plate has 2 lines
+        else:   #  2 line 
             return [
                 [char[0] for char in first_line],
                 [char[0] for char in second_line]
@@ -199,6 +192,9 @@ class E2E(object):
             os.makedirs(output_dir)
         for i, char_img in enumerate(self.character_images):
             img = char_img.squeeze()
-            filename = os.path.join(output_dir, f"char_{i}.jpg")
-            cv2.imwrite(filename, img)
+            img_array = np.array(img)
+            avg = np.mean(img_array)
+            if avg >= 35:
+                filename = os.path.join(output_dir, f"char_{i}.jpg")
+                cv2.imwrite(filename, img)
                     

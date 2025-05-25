@@ -1,3 +1,4 @@
+# CONTRIBUTORS: THẮNG, BÌNH, HOÀNG ANH, BẢO
 import cv2
 import numpy as np
 from skimage import measure
@@ -46,6 +47,7 @@ class knn_E2E(object):
         for coordinate in coordinates:
             yield coordinate
 
+### hoàng anh ----
     def predict(self, image):
         self.image = image
 
@@ -60,7 +62,7 @@ class knn_E2E(object):
             self.image = draw_labels_and_boxes(self.image, license_plate, coordinate)
 
         return self.image
-
+# bình---
     def segmentation(self, LpRegion):
 
         V = cv2.split(cv2.cvtColor(LpRegion, cv2.COLOR_BGR2HSV))[2]
@@ -95,7 +97,7 @@ class knn_E2E(object):
                     square_candidate = cv2.resize(square_candidate, (28, 28), cv2.INTER_AREA)
                     square_candidate = square_candidate.reshape((28, 28, 1))
                     self.candidates.append((square_candidate, (y, x)))
-
+# Bảo
     def recognizeChar(self):
         characters = []
         coordinates = []
@@ -121,7 +123,7 @@ class knn_E2E(object):
                 
                 self.candidates.append((result_idx[i], coordinates[i]))
 
-
+# thắng --
     def format(self):
         first_line = []
         second_line = []
@@ -137,23 +139,26 @@ class knn_E2E(object):
 
         first_line = sorted(first_line, key=take_second)
         second_line = sorted(second_line, key=take_second)
+        chars = [ele[0] for ele in first_line + second_line]
+        replace = {'D': '0', 'T': '1', 'S': '5','P':'8','Z':'2'}
+        new_chars = []
+        for i, char in enumerate(chars):
+            if char in replace:
+                new_chars.append(replace[char])
+            else:
+                new_chars.append(char)
+
+
 
         if len(second_line) == 0:
-            license_plate = "".join([str(ele[0]) for ele in first_line])
+            license_plate = "".join(new_chars)
         else:
             license_plate = "".join([str(ele[0]) for ele in first_line]) + "-" + \
                           "".join([str(ele[0]) for ele in second_line])
 
         return license_plate
+### thắng --
     def get_license_plate_list(self):
-            """Returns the detected license plate characters in a list format.
-            
-            Returns:
-                list: A list containing the license plate characters grouped by lines.
-                    For single-line plates, returns [list_of_characters].
-                    For two-line plates, returns [first_line_chars, second_line_chars].
-                    Returns None if no plate is detected.
-            """
             if not hasattr(self, 'candidates') or not self.candidates:
                 return None
                 
@@ -172,9 +177,9 @@ class knn_E2E(object):
             first_line = sorted(first_line, key=take_second)
             second_line = sorted(second_line, key=take_second)
 
-            if len(second_line) == 0:  # if license plate has 1 line
+            if len(second_line) == 0:  # 1 line
                 return [[char[0] for char in first_line]]
-            else:   # if license plate has 2 lines
+            else:   # 2 lines (không cần )
                 return [
                     [char[0] for char in first_line],
                     [char[0] for char in second_line]
